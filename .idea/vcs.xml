@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/blooming-dusk-60486" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/secure-crag-99584" vcs="Git" />
   </component>
 </project>

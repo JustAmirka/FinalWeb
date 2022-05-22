@@ -1,12 +1,12 @@
 {
-  "name": "ecommerce-nodejs-website",
+  "name": "WebProject",
   "version": "1.0.0",
   "main": "app.js",
-  "description": "A virtual ecommerce website using Node js, Express js, and Mongoose.",
+  "description": "",
   "scripts": {
     "start": "nodemon app.js"
   },
-  "author": "Maryam Aljanabi",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "@adminjs/express": "^4.1.3",
