@@ -108,7 +108,7 @@ app.use(function (err, req, res, next) {
     res.render("error");
 });
 
-var port = process.env.PORT || 4000;
+var port = process.env.PORT || 8080;
 app.set("port", port);
 app.listen(port, () => {
     console.log("Server running at port " + port);

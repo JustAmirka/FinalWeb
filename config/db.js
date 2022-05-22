@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     const uri = process.env.MONGO_URI || "mongodb://localhost:27017/FullProject";
-    await mongoose
-      .connect(uri, {
+    mongoose.Promise = global.Promise;
+    mongoose.connect(uri, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,
