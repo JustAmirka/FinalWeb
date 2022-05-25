@@ -22,8 +22,17 @@ const app = express();
 require("./config/passport");
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+const dbConfig = require('./config/db.js');
 // mongodb configuration
-connectDB();
+mongoose.Promise = global.Promise;
+mongoose.connect(dbConfig.url, {
+    useNewUrlParser: true
+}).then(() => {
+    console.log("Databse Connected Successfully!!");
+}).catch(err => {
+    console.log('Could not connect to the database', err);
+    process.exit();
+});
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
