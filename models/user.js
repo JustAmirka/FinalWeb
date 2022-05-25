@@ -58,7 +58,7 @@ passport.use(new GoogleStrategy({
 
         clientID:process.env.CLIENT_ID,
         clientSecret:process.env.CLIENT_SECRET,
-        callbackURL:'http://localhost:3000/auth/google/callback'
+        callbackURL:'http://localhost:8080/auth/google/callback'
     },function(accessToken, refreshToken, profile, cb) {
         userModel.findOrCreate({ googleId: profile.id }, function (err, user) {
             return cb(err, user);
