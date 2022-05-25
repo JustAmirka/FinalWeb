@@ -12,9 +12,15 @@ const flash = require("connect-flash");
 const Category = require("./models/category");
 var MongoStore = require("connect-mongo")(session);
 const connectDB = require("./config/db");
+const swaggerUi = require('swagger-ui-express')
+swaggerDocument = require('./swagger.json');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const  User = require("./models/user");
+const  LocalStrategy = require("passport-local");
 
 const app = express();
 require("./config/passport");
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // mongodb configuration
 connectDB();
@@ -43,10 +49,20 @@ app.use(
         cookie: { maxAge: 60 * 1000 * 60 * 3 },
     })
 );
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
 
+
+
+app.use(flash());
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.get("/profile", function(req, res){
+    if(req.isAuthenticated()){
+        res.render("profile")
+    }else{
+        res.redirect("/signin")
+    }
+});
 // global variables across routes
 app.use(async (req, res, next) => {
     try {
@@ -61,7 +77,23 @@ app.use(async (req, res, next) => {
         res.redirect("/");
     }
 });
+app.get('/auth/google',passport.authenticate('google',{
 
+    scope:['profile','email']
+}));
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/user/signin' }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/user/profile');
+    });
+//
+
+app.get("/logout",function (req, res){
+    req.logout()
+    res.redirect("/")
+})
 // add breadcrumbs
 get_breadcrumbs = function (url) {
     var rtn = [{ name: "Home", url: "/" }],
@@ -108,7 +140,13 @@ app.use(function (err, req, res, next) {
     res.render("error");
 });
 
-var port = process.env.PORT || 8080;
+
+
+
+
+
+
+var port = process.env.PORT || 3000;
 app.set("port", port);
 app.listen(port, () => {
     console.log("Server running at port " + port);

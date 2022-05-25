@@ -1,6 +1,6 @@
 const express = require("express");
 const csrf = require("csurf");
-
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 const Product = require("../models/product");
 const Category = require("../models/category");
 const Cart = require("../models/cart");
@@ -223,41 +223,41 @@ router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
     return res.redirect("/shopping-cart");
   }
   const cart = await Cart.findById(req.session.cart._id);
-  stripe.charges.create(
-    {
-      amount: cart.totalCost * 100,
-      currency: "usd",
-      source: req.body.stripeToken,
-      description: "Test charge",
-    },
-    function (err, charge) {
-      if (err) {
-        req.flash("error", err.message);
-        console.log(err);
-        return res.redirect("/checkout");
-      }
-      const order = new Order({
-        user: req.user,
-        cart: {
-          totalQty: cart.totalQty,
-          totalCost: cart.totalCost,
-          items: cart.items,
-        },
-        address: req.body.address,
-        paymentId: charge.id,
-      });
-      order.save(async (err, newOrder) => {
+  await stripe.charges.create(
+      {
+        amount: cart.totalCost * 100,
+        currency: "usd",
+        source: req.body.stripeToken,
+        description: "Test charge",
+      },
+      function (err, charge) {
         if (err) {
+          req.flash("error", err.message);
           console.log(err);
           return res.redirect("/checkout");
         }
-        await cart.save();
-        await Cart.findByIdAndDelete(cart._id);
-        req.flash("success", "Successfully purchased");
-        req.session.cart = null;
-        res.redirect("/user/profile");
-      });
-    }
+        const order = new Order({
+          user: req.user,
+          cart: {
+            totalQty: cart.totalQty,
+            totalCost: cart.totalCost,
+            items: cart.items,
+          },
+          address: req.body.address,
+          paymentId: charge.id,
+        });
+        order.save(async (err, newOrder) => {
+          if (err) {
+            console.log(err);
+            return res.redirect("/checkout");
+          }
+          await cart.save();
+          await Cart.findByIdAndDelete(cart._id);
+          req.flash("success", "Successfully purchased");
+          req.session.cart = null;
+          res.redirect("/user/profile");
+        });
+      }
   );
 });
 

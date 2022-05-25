@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const uri = process.env.MONGO_URI || "mongodb+srv://amirzhan:password@cluster0.imoae.mongodb.net/?retryWrites=true&w=majority";
+    const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/FullProject'
+        /* "mongodb+srv://amirzhan:amirzhan@cluster0.imoae.mongodb.net/?retryWrites=true&w=majority"*/;
     mongoose.Promise = global.Promise;
     mongoose.connect(uri, {
         useNewUrlParser: true,
