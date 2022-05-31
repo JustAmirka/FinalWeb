@@ -160,8 +160,8 @@ app.use(function (err, req, res, next) {
 
 
 
-app.listen(process.env.PORT || 8080, function(){
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
+var port = process.env.PORT || 8080;
+var server=app.listen(port,function() {
+    console.log("app running on port 8080"); });
 
 module.exports = app;
