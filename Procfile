@@ -1,2 +1,1 @@
-web:npm start -p $PORT
-worker:bundle exec sidekiq
+web:node app.js
