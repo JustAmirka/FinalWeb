@@ -5,7 +5,8 @@
   "description": "",
   "scripts": {
     "start": "nodemon --exec babel-node app.js",
-    "build": "ng build"
+    "build": "ng build",
+    "heroku-postbuild": "ng build --prod"
   },
   "author": "",
   "license": "MIT",
