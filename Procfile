@@ -1,2 +1,2 @@
-web:bundle exec rails server -p $PORT
+web:npm start -p $PORT
 worker:bundle exec sidekiq
