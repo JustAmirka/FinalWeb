@@ -161,9 +161,8 @@ app.use(function (err, req, res, next) {
 
 
 const { PORT=8080, LOCAL_ADDRESS='0.0.0.0' } = process.env
-server.listen(PORT, LOCAL_ADDRESS, () => {
-    const address = server.address();
-    console.log('server listening at', address);
+app.listen(PORT, LOCAL_ADDRESS, function(){
+    console.log('server listening at', this.address().port, app.settings.env);
 });
 
 module.exports = app;
