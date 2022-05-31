@@ -12,11 +12,16 @@ const flash = require("connect-flash");
 const Category = require("./models/category");
 var MongoStore = require("connect-mongo")(session);
 const connectDB = require("./config/db");
-const swaggerUi = require('swagger-ui-express')
+
 swaggerDocument = require('./swagger.json');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const  User = require("./models/user");
 const  LocalStrategy = require("passport-local");
+
+const methodOverride = require('method-override')
+const swaggerUi = require('swagger-ui-express')
+swaggerDocument = require('./swagger.json');
+
 
 const app = express();
 require("./config/passport");
@@ -36,7 +41,7 @@ mongoose.connect(dbConfig.url, {
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
+app.use(methodOverride('_method'))
 // admin route
 const adminRouter = require("./routes/admin");
 app.use("/admin", adminRouter);
@@ -91,7 +96,7 @@ app.get('/auth/google',passport.authenticate('google',{
     scope:['profile','email']
 }));
 
-app.get('/auth/google/callback',
+app.get('/auth/google/home',
     passport.authenticate('google', { failureRedirect: '/user/signin' }),
     function(req, res) {
         // Successful authentication, redirect home.
@@ -155,7 +160,7 @@ app.use(function (err, req, res, next) {
 
 
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3000;
 app.set("port", port);
 app.listen(port, () => {
     console.log("Server running at port " + port);

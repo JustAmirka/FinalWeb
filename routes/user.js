@@ -7,6 +7,7 @@ const Product = require("../models/product");
 const Order = require("../models/order");
 const Cart = require("../models/cart");
 const middleware = require("../middleware");
+const UserController = require('../config/passport')
 const {
   userSignUpValidationRules,
   userSignInValidationRules,
@@ -139,4 +140,10 @@ router.get("/logout", middleware.isLoggedIn, (req, res) => {
   req.session.cart = null;
   res.redirect("/");
 });
+
+router.patch('/:email', UserController.update);
+
+router.delete('/:email', UserController.destroy);
+
+
 module.exports = router;
